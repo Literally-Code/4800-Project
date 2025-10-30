@@ -1,7 +1,7 @@
 # harmony/urls.py
 from rest_framework.routers import DefaultRouter
 from django.urls import path, include
-from .views import UserViewSet, song_search, SongViewSet, spotify_callback, spotify_login
+from .views import UserViewSet, song_search, SongViewSet, spotify_callback, spotify_login, matches
 from rest_framework.authtoken.views import obtain_auth_token
 
 router = DefaultRouter()
@@ -13,4 +13,5 @@ urlpatterns = [
     path('spotify-auth/login/', spotify_login),
     path('spotify-auth/callback/', spotify_callback),
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),  # to obtain token
+    path('matches/', matches, name='matches'),
 ]

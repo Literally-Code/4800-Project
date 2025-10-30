@@ -1,7 +1,7 @@
 from django.shortcuts import redirect
 from rest_framework import viewsets, permissions, status 
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
-from .models import User, Song
+from .models import User, Song, UserFavoriteGenre
 from .serializers import UserSerializer, SongSerializer
 from .permissions import IsSelfOrReadOnly
 from rest_framework.decorators import action, api_view, permission_classes 
@@ -275,3 +275,22 @@ def spotify_callback(request):
     frontend_redirect = f"https://harmonymatching.com/login?token={auth_token.key}"
     return redirect(frontend_redirect)
 
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def matches(request):
+    user = request.user
+    favorite_genres = UserFavoriteGenre.objects.filter(user=user).values_list('genre', flat=True)
+    
+    matched_users = UserFavoriteGenre.objects.filter(
+        genre__in=favorite_genres
+    ).exclude(user=user).select_related('user').distinct()
+
+    results = []
+    for match in matched_users:
+        results.append({
+            "id": match.user.id,
+            "name": match.user.username,
+            "genres": list(UserFavoriteGenre.objects.filter(user=match.user).values_list('genre__genre_name', flat=True))
+        })
+    return Response(results)
