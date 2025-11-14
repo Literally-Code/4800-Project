@@ -23,6 +23,14 @@ function Dashboard() {
         }
     };
 
+    const matchGetOtherUser = (match) => {
+        if (match.user1_id == currentUserAuthor.id)
+        {
+            return match.user2_username;
+        }
+        return match.user1_username;
+    }
+
     console.log(acceptedMatches)
 
     return (
@@ -44,7 +52,7 @@ function Dashboard() {
                                     : 'bg-white/80 text-gray-800 hover:bg-white hover:shadow-md'
                             }`}
                         >
-                            <div className="font-semibold">{match.user2_username}</div>
+                            <div className="font-semibold">{matchGetOtherUser(match)}</div>
                             <div className="text-sm text-gray-600 mt-1">Click to view chat</div>
                         </button>
                     ))}
