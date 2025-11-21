@@ -24,6 +24,7 @@ function Dashboard({ showChatsOverlay = false, setShowChatsOverlay = () => {} })
         } else {
             setCurrentChatID(match.id);
         }
+        setShowChatsOverlay(false);
     };
 
     const handleCloseChatWindow = () => {
@@ -40,7 +41,7 @@ function Dashboard({ showChatsOverlay = false, setShowChatsOverlay = () => {} })
     return (
         <div className="flex flex-row h-screen bg-linear-to-br from-rose-300 via-pink-400 to-rose-500">
             {/* Desktop Left sidebar - Chats (hidden on mobile) */}
-            <div className="hidden md:flex w-80 ml-16 bg-pink-200 border-r border-white/20 flex-col">
+            <div className="hidden flex-1 md:flex ml-16 bg-pink-200 border-r border-white/20 flex-col">
                 <div className="p-4 border-b border-white/20">
                     <h2 className="text-2xl font-bold text-white text-center">Chats</h2>
                 </div>
@@ -63,9 +64,9 @@ function Dashboard({ showChatsOverlay = false, setShowChatsOverlay = () => {} })
             </div>
 
             {/* Main content area */}
-            <div className="flex-1 relative bottom-14 md:bottom-0 flex items-center justify-center p-6">
+            <div className="flex-2 relative flex items-start justify-center p-6 md:items-center md:p-0">
                 {currentChatID != null && !showChatsOverlay ? (
-                    <div className="w-full h-[90%] max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden">
+                    <div className="w-full h-[80vh] bg-white rounded-2xl shadow-2xl md:rounded-none md:shadow-none overflow-hidden md:h-full ">
                         <Chat matches={acceptedMatches} currentChatID={currentChatID} currentUser={currentUserAuthor} />
                     </div>
                 ) : (
