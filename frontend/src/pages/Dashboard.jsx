@@ -41,20 +41,21 @@ function Dashboard({ showChatsOverlay = false, setShowChatsOverlay = () => {} })
     return (
         <div className="flex flex-row h-screen bg-linear-to-br from-secondary to-primary">
             {/* Desktop Left sidebar - Chats (hidden on mobile) */}
-            <div className="hidden flex-1 md:flex ml-16 bg-secondary border-r border-accent flex-col">
+            <div className="hidden animate-fade-in duration-100 flex-1 md:flex ml-16 bg-secondary border-r border-accent flex-col">
                 {/*<div className="p-4 border-b border-accent">
                     <h2 className="text-2xl font-bold text-white text-center">Chats</h2>
                 </div>*/}
-                <div className="flex-1 overflow-y-auto space-y-1">
-                    {acceptedMatches.map((match) => (
-                        <button
+                <div className="flex flex-col overflow-y-auto space-y-1">
+                    {acceptedMatches.map((match, index) => {
+                        return <button
                             key={match.id}
                             onClick={() => handleChatClick(match)}
-                            className={`w-full p-4 text-left transition-all ${
+                            className={`w-full p-4 text-left animate-fade-in ${
                                 currentChatID === match.id
                                     ? 'bg-accent text-gray-900 shadow-lg'
                                     : 'bg-white/40 text-gray-800 hover:bg-white hover:shadow-md'
                             }`}
+                            style={{ animationDuration: `${index * 0.1}s` }}
                         >
                             <div className="flex flex-row items-center gap-2 font-semibold">
                                 <img className="w-10" src="#"></img>
@@ -64,12 +65,12 @@ function Dashboard({ showChatsOverlay = false, setShowChatsOverlay = () => {} })
                                 </div>
                             </div>
                         </button>
-                    ))}
+                    })}
                 </div>
             </div>
 
             {/* Main content area */}
-            <div className="flex-2 relative flex items-start justify-center p-6 md:items-center md:p-0">
+            <div className="flex-1/2 animate-fade-in relative flex items-start justify-center p-6 md:items-center md:p-0">
                 {currentChatID != null && !showChatsOverlay ? (
                     <div className="w-full h-[80vh] bg-white rounded-2xl shadow-2xl md:rounded-none md:shadow-none overflow-hidden md:h-full ">
                         <Chat matches={acceptedMatches} currentChatID={currentChatID} currentUser={currentUserAuthor} />
