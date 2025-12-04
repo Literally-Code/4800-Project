@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Message from "../components/Message";
 import { useAuth } from "../components/auth/AuthContext";
 import { API_BASE_URL } from "../config";
@@ -13,6 +13,15 @@ const Chat = ({ matches, currentChatID, currentUser }) =>
 
     const [isHoldingShift, setIsHoldingShift] = useState(false);
     const placeholderText = 'Send a message...';
+
+    const ref = useRef(null);
+
+    useEffect(() => {
+        const el = ref.current;
+        if (el) {
+            el.scrollTop = el.scrollHeight;
+        }
+    }, [currentChat]);
 
     // Update the messages state when a response from the server is loaded
     useEffect(() => 
@@ -118,7 +127,7 @@ const Chat = ({ matches, currentChatID, currentUser }) =>
     return (
         <div className="flex flex-col h-full">
             {/* Messages area */}
-            <div className="flex-1 overflow-y-auto p-8 bg-gradient-to-br bg-primary">
+            <div ref={ref} className="flex-1 overflow-y-auto p-8 bg-gradient-to-br bg-lm-light-bg z-4 shadow">
                 {currentChat.map((message, index) => (
                     <Message key={index} author={new Author(message.sender, message.sender_username)} currentUser={currentUser} text={message.content} />
                 ))}
@@ -130,10 +139,10 @@ const Chat = ({ matches, currentChatID, currentUser }) =>
             </div>
             
             {/* Input area at bottom */}
-            <div className="p-4 bg-white border-t border-gray-200">
+            <div className="p-4 bg-lm-dark-bg">
                 <div className="flex flex-row gap-2 w-full">
                     <div 
-                        className="flex-1 p-3 border border-gray-300 rounded-lg bg-white text-gray-900 min-h-[50px] max-h-[150px] overflow-y-auto focus:outline-none focus:border-rose-400" 
+                        className="flex-1 p-3 border border-gray-300 rounded-lg bg-lm-light-bg text-black min-h-[50px] max-h-[150px] overflow-y-auto focus:outline-none focus:border-rose-400" 
                         data-testid="input" 
                         contentEditable="true" 
                         suppressContentEditableWarning={true} 

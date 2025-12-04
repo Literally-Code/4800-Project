@@ -7,6 +7,46 @@ import { useState, useEffect } from "react";
 import MatchCard from "../components/dashboard/MatchCard";
 import { Author } from "./Chat";
 import { getAcceptedMatches } from "../api/matches";
+import { getChats } from "../api/chat";
+
+const ChatSelector = ({ index, handler, currentChatID, match }) => {
+    const [lastMessage, setLastMessage] = useState("");
+    
+    useEffect(() => {
+        getChats(match.id)
+            .then((res) => {
+                if (res.status == 200)
+                {
+                    setLastMessage(res.data.at(-1).content)
+                }
+            })
+    })
+
+    return <button
+        key={match.id}
+        onClick={handler}
+        className={`w-full p-4 text-left animate-fade-in ${
+            currentChatID === match.id
+                ? 'bg-accent text-gray-900 shadow-lg'
+                : 'bg-white/40 text-gray-800 hover:bg-white hover:shadow-md'
+        }`}
+        style={{ animationDuration: `${(index + 1) * 0.7}s` }}
+    >
+        <div className="flex flex-row items-center gap-2 font-semibold">
+            <img className="w-10" src="#"></img>
+            <div>
+                <p>{match.user1_username}</p>
+                <div className="font-normal overflow-x-ellipsis overflow-clip whitespace-nowrap min-h-4 w-5/6 mask-[linear-gradient(to_right,black,transparent)] 
+    [-webkit-mask-image:linear-gradient(to_right,black,transparent)]">
+                    {lastMessage.substring(0, 10)}
+                </div>
+            </div>
+            <div className="font-light flex flex-row justify-end w-full">
+                {true /* Has a new message condition */ ? <div className="w-3 h-3 bg-secondary rounded-4xl"></div> : null}
+            </div>
+        </div>
+    </button>
+}
 
 function Dashboard({ showChatsOverlay = false, setShowChatsOverlay = () => {} }) {
     const [acceptedMatches, setAcceptedMatches] = useState([]);
@@ -41,30 +81,13 @@ function Dashboard({ showChatsOverlay = false, setShowChatsOverlay = () => {} })
     return (
         <div className="flex flex-row h-screen bg-linear-to-br from-secondary to-primary">
             {/* Desktop Left sidebar - Chats (hidden on mobile) */}
-            <div className="hidden animate-fade-in duration-100 flex-1 md:flex ml-16 bg-secondary border-r border-accent flex-col">
+            <div className="hidden animate-fade-in duration-100 flex-1 md:flex ml-16 bg-lm-dark-bg flex-col">
                 {/*<div className="p-4 border-b border-accent">
                     <h2 className="text-2xl font-bold text-white text-center">Chats</h2>
                 </div>*/}
-                <div className="flex flex-col overflow-y-auto space-y-1">
+                <div className="flex flex-col overflow-y-auto">
                     {acceptedMatches.map((match, index) => {
-                        return <button
-                            key={match.id}
-                            onClick={() => handleChatClick(match)}
-                            className={`w-full p-4 text-left animate-fade-in ${
-                                currentChatID === match.id
-                                    ? 'bg-accent text-gray-900 shadow-lg'
-                                    : 'bg-white/40 text-gray-800 hover:bg-white hover:shadow-md'
-                            }`}
-                            style={{ animationDuration: `${index * 0.1}s` }}
-                        >
-                            <div className="flex flex-row items-center gap-2 font-semibold">
-                                <img className="w-10" src="#"></img>
-                                <p>{match.user2_username}</p>
-                                <div className="font-light flex flex-row justify-end w-full">
-                                    {true /* Has a new message condition */ ? <div className="w-3 h-3 bg-secondary rounded-4xl"></div> : null}
-                                </div>
-                            </div>
-                        </button>
+                        return <ChatSelector index={index} handler={() => {handleChatClick(match)}} currentChatID={currentChatID} match={match} lastMessage={"TestTestTestTestTestTestTestTestTestTestTestTest"} />
                     })}
                 </div>
             </div>
