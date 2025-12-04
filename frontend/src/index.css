@@ -40,6 +40,23 @@ body {
     color: hsl(var(--foreground));
 }
 
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #fff;
+  border-radius: 10px
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
 @theme {
     --color-primary: #5f4d8d;
     --color-secondary: #fa8285;
