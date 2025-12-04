@@ -47,7 +47,7 @@ const BottomNav = ({ onChatsClick = null, showChatsOverlay = false }) => {
                 </svg>
             ), 
             label: "Settings", 
-            path: "#",
+            path: "/matchsettings",
             onClick: null
         }
     ];
